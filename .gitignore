@@ -1,0 +1,7 @@
+/.settings
+/.bpmn
+target/
+/.classpath
+/.project
+/activiti.iml
+.idea/
