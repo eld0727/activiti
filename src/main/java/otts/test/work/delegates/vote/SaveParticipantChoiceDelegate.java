@@ -5,7 +5,6 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import otts.test.work.dao.UserDAO;
 import otts.test.work.dao.VoteOptionDAO;
 import otts.test.work.dao.VoteParticipantDAO;
 import otts.test.work.dbo.VoteOption;
@@ -26,15 +25,13 @@ public class SaveParticipantChoiceDelegate implements JavaDelegate {
     @Autowired
     private VoteOptionDAO voteOptionDAO;
 
-    @Autowired
-    private UserDAO userDAO;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         String participant = (String) execution.getVariable("participant");
         VoteChoiceDTO option = (VoteChoiceDTO) execution.getVariable("voteChoice");
         VoteOption voteOption = voteOptionDAO.getOne(option.getOption());
-        VoteParticipant voteParticipant = voteParticipantDAO.getByVoteAndUser(voteOption.getVote(), userDAO.getOne(participant));
+        VoteParticipant voteParticipant = voteParticipantDAO.getByVoteAndUser(voteOption.getVote(), participant);
         voteParticipant.setVoteOption(voteOption);
     }
 }

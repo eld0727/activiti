@@ -1,7 +1,6 @@
 package otts.test.work.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import otts.test.work.dbo.User;
 import otts.test.work.dbo.Vote;
 import otts.test.work.dbo.VoteParticipant;
 
@@ -14,5 +13,5 @@ public interface VoteParticipantDAO extends JpaRepository<VoteParticipant, Long>
     /**
      * Gets vote participant by vote and user
      */
-    VoteParticipant getByVoteAndUser(Vote vote, User user);
+    VoteParticipant getByVoteAndUser(Vote vote, String user);
 }

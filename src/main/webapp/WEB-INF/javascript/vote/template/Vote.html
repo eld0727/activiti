@@ -1,0 +1,28 @@
+<div class="well">
+    <div class="form-horizontal">
+        <div><%- text %></div>
+        <% if (showResults) { %>
+        <div class="form-group">
+            <% _.each(options, function(opt) { %>
+            <div><%- opt.text %><span class="badge"><%- opt.count %></span></div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%- opt.percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%- opt.percent %>%;">
+                    <%- opt.percent %>%
+                </div>
+            </div>
+            <% }); %>
+        </div>
+        <% } else { %>
+        <div class="form-group radio-group">
+            <% _.each(options, function(opt) { %>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="voteOption" value="<%- opt.id %>">
+                    <%- opt.text %>
+                </label>
+            </div>
+            <% }); %>
+        </div>
+        <% } %>
+    </div>
+</div>

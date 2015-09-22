@@ -5,7 +5,6 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import otts.test.work.dao.UserDAO;
 import otts.test.work.dao.VoteDAO;
 import otts.test.work.dao.VoteOptionDAO;
 import otts.test.work.dao.VoteParticipantDAO;
@@ -26,9 +25,6 @@ import java.util.List;
 public class CreateVoteDelegate implements JavaDelegate {
 
     @Autowired
-    private UserDAO userDAO;
-
-    @Autowired
     private VoteDAO voteDAO;
 
     @Autowired
@@ -43,14 +39,17 @@ public class CreateVoteDelegate implements JavaDelegate {
         Vote vote = new Vote();
         vote.setText(voteCreateDTO.getText());
         vote.setProcessId(execution.getProcessInstanceId());
-        vote.setOwner(userDAO.getOne(voteCreateDTO.getOwner()));
-        voteDAO.saveAndFlush(vote);
+        vote.setOwner(voteCreateDTO.getOwner());
+        vote.setOptions(new ArrayList<VoteOption>());
+        vote.setParticipants(new ArrayList<VoteParticipant>());
+        voteDAO.save(vote);
 
         for (String option : voteCreateDTO.getOptions()) {
             VoteOption voteOption = new VoteOption();
             voteOption.setVote(vote);
             voteOption.setText(option);
             voteOptionDAO.save(voteOption);
+            vote.getOptions().add(voteOption);
         }
 
         List<String> participants = new ArrayList<>(voteCreateDTO.getParticipants());
@@ -60,12 +59,13 @@ public class CreateVoteDelegate implements JavaDelegate {
 
         for (String participant : participants) {
             VoteParticipant voteParticipant = new VoteParticipant();
-            voteParticipant.setUser(userDAO.getOne(participant));
+            voteParticipant.setUser(participant);
             voteParticipant.setVote(vote);
             voteParticipantDAO.save(voteParticipant);
+            vote.getParticipants().add(voteParticipant);
         }
 
-        execution.setVariable("vote", vote);
+        execution.setVariable("vote", vote.getId());
         execution.setVariable("participants", participants);
     }
 }

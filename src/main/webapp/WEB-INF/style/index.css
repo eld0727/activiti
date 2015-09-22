@@ -3,5 +3,11 @@ body {
 }
 .starter-template {
     padding: 40px 15px;
-    text-align: center;
+}
+
+.loader {
+    background: url(ajax-loader.gif) no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
 }

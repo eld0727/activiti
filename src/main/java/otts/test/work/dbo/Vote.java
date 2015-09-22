@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by alex on 19.09.2015.<br/>
@@ -37,8 +38,19 @@ public class Vote extends IdentifiedEntity implements Serializable {
     /**
      * Owner of vote
      */
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "owner_id")
-    private User owner;
+    @Column(nullable = false)
+    private String owner;
+
+    /**
+     * Vote options
+     */
+    @OneToMany(mappedBy = "vote", fetch = FetchType.EAGER)
+    private List<VoteOption> options;
+
+    /**
+     * Vote participants
+     */
+    @OneToMany(mappedBy = "vote", fetch = FetchType.EAGER)
+    private List<VoteParticipant> participants;
 
 }

@@ -1,14 +1,12 @@
 package otts.test.work.service.impl;
 
-import org.activiti.engine.IdentityService;
-import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import otts.test.work.dao.NotificationDAO;
 import otts.test.work.dbo.Notification;
-import otts.test.work.dbo.User;
 import otts.test.work.service.NotificationService;
 import otts.test.work.service.UserService;
 
@@ -31,7 +29,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public List<Notification> getAllUndeliveredNotifications() {
         User currentUser = userService.getCurrentUser();
-        List<Notification> allUndeliveredByUser = notificationDAO.findAllUndeliveredByUser(currentUser);
+        List<Notification> allUndeliveredByUser = notificationDAO.findAllUndeliveredByUser(currentUser.getId());
         if(!CollectionUtils.isEmpty(allUndeliveredByUser)) {
             for (Notification notification : allUndeliveredByUser) {
                 notification.setDelivered(true);
@@ -43,6 +41,6 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public List<Notification> getAllNotifications() {
         User currentUser = userService.getCurrentUser();
-        return notificationDAO.findAllByUser(currentUser);
+        return notificationDAO.findAllByUser(currentUser.getId());
     }
 }

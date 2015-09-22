@@ -33,9 +33,8 @@ public class Notification extends IdentifiedEntity implements Serializable {
     /**
      * User to notify
      */
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private String user;
 
     /**
      * Is message delivered to {@link #user}

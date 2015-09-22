@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import otts.test.work.dbo.Notification;
-import otts.test.work.dbo.User;
 
 import java.util.List;
 
@@ -15,8 +14,8 @@ import java.util.List;
 public interface NotificationDAO extends JpaRepository<Notification, Long> {
 
     @Query("select n from Notification n where n.delivered = false and n.user = :user")
-    List<Notification> findAllUndeliveredByUser(@Param("user") User user);
+    List<Notification> findAllUndeliveredByUser(@Param("user") String user);
 
-    List<Notification> findAllByUser(User user);
+    List<Notification> findAllByUser(String user);
 
 }
