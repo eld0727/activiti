@@ -24,32 +24,22 @@ import org.springframework.security.web.authentication.switchuser.SwitchUserFilt
 @Order(99)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final String logout_url = "/logout";
-
-    @Bean
-    public SwitchUserFilter switchUserFilter() {
-        SwitchUserFilter switchUserFilter = new SwitchUserFilter();
-        switchUserFilter.setExitUserUrl(logout_url);
-        switchUserFilter.setTargetUrl("/");
-        switchUserFilter.setUserDetailsService(userDetailsService());
-        return switchUserFilter;
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .csrf().disable()
             .authorizeRequests()
+                .antMatchers("/webjars/**", "/js/**", "/style/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
                 .defaultSuccessUrl("/", true)
+                .loginPage("/login")
                 .permitAll()
                 .and()
             .logout()
                 .permitAll()
                 .and()
-                //.addFilter(switchUserFilter())
             .httpBasic();
     }
 }

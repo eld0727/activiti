@@ -17,4 +17,9 @@ public class ApplicatoinController {
     public String index(Model model) {
         return "index";
     }
+
+    @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
+    public String login() {
+        return "login";
+    }
 }
