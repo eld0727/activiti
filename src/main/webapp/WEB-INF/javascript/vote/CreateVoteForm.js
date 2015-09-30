@@ -9,7 +9,7 @@ define([
 
         tagName: "div",
 
-        className: "col-md-6 col-sm-9",
+        className: "container",
 
         events: {
             "click #add-option":    "addOption",

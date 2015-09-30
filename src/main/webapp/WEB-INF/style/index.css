@@ -2,7 +2,7 @@ body {
     padding-top: 50px;
 }
 .starter-template {
-    padding: 40px 15px;
+    padding: 5px;
 }
 
 .loader {
@@ -10,4 +10,10 @@ body {
     width: 25px;
     height: 25px;
     display: inline-block;
+}
+
+.process-editor {
+    height: 93%;
+    padding-left: 0;
+    padding-right: 0;
 }

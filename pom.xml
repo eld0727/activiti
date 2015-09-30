@@ -25,6 +25,10 @@
             <id>webjars</id>
             <url>http://webjars.github.com/m2</url>
         </repository>
+        <repository>
+            <id>vaadin-addons</id>
+            <url>http://maven.vaadin.com/vaadin-addons</url>
+        </repository>
     </repositories>
 
     <parent>
@@ -32,6 +36,73 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.2.5.RELEASE</version>
     </parent>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+                <configuration>
+                    <mainClass>otts.test.work.Application</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>compile-widgetset</id>
+            <build>
+                <plugins>
+                    <!-- Compile custom GWT components or widget dependencies with
+                      the GWT compiler -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
+                        <version>2.3.0</version>
+                        <configuration>
+                            <webappDirectory>src/main/webapp/VAADIN/widgetsets</webappDirectory>
+                            <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                            <runTarget>clean</runTarget>
+                            <compileReport>true</compileReport>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>resources</goal>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.vaadin</groupId>
+                        <artifactId>vaadin-maven-plugin</artifactId>
+                        <version>1.0.2</version>
+                        <executions>
+                            <execution>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>update-widgetset</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -81,6 +152,23 @@
         </dependency>
 
         <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-explorer</artifactId>
+            <version>${activiti.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-modeler</artifactId>
+            <version>${activiti.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>xalan</groupId>
+                    <artifactId>xalan</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.6</version>
@@ -101,6 +189,21 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
+        <!-- Vaadin addons -->
+        <!-- Must be defined both in activiti-explorer and activiti-webapp-explorer,
+          as otherwise the gwt compiler won't find it -->
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>dcharts-widget</artifactId>
+            <version>0.10.0</version>
         </dependency>
 
         <!-- webjars -->
@@ -159,26 +262,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
-                <configuration>
-                    <mainClass>otts.test.work.Application</mainClass>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

@@ -11,7 +11,6 @@
     <link rel='stylesheet' href='<%=request.getContextPath()%>/style/index.css'>
     <script src="<%=request.getContextPath()%>/webjarsjs"></script>
     <link rel='stylesheet' href='<%= webJarAssetLocator.getFullPath("css/bootstrap.min.css").replace("META-INF/resources/", "") %>'>
-    <link rel='stylesheet' href='<%= webJarAssetLocator.getFullPath("css/bootstrap-multiselect.css").replace("META-INF/resources/", "") %>'>
     <script src="<%= webJarAssetLocator.getFullPath("require.min.js").replace("META-INF/resources/", "") %>"></script>
 </head>
 <body>
@@ -22,19 +21,18 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="#vote">Available votes</a></li>
-                    <li><a href="#vote/create">Create vote</a></li>
+                    <li><a href="#vote">Доступные голосования</a></li>
+                    <li><a href="#vote/create">Создать голосование</a></li>
+                    <li><a href="#edit">Редактировать процесс</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="<%=request.getContextPath()%>/logout">logout</a></li>
+                    <li><a href="<%=request.getContextPath()%>/logout">выйти</a></li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="starter-template" id="main-container">
-        </div>
+    <div class="starter-template" id="main-container">
     </div>
 
     <script>

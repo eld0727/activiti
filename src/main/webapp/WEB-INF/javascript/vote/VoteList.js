@@ -7,7 +7,7 @@ define([
 
         tagName: "div",
 
-        className: "",
+        className: "container",
 
         events: {},
 

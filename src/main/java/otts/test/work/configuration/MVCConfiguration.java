@@ -1,7 +1,11 @@
 package otts.test.work.configuration;
 
+import org.activiti.explorer.servlet.ExplorerApplicationServlet;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -29,6 +33,8 @@ public class MVCConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/javascript/");
         registry.addResourceHandler("/style/**").addResourceLocations("/WEB-INF/style/");
+        registry.addResourceHandler("/editor-app/**").addResourceLocations("/editor-app/");
+        registry.addResourceHandler("/**").addResourceLocations("/");
     }
 
 }

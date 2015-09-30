@@ -12,7 +12,10 @@ import org.springframework.context.annotation.Configuration;
  * Created by alex on 05.09.2015.<br/>
  * Application initialization
  */
-@ComponentScan(value = "otts.test.work")
+@ComponentScan(value = {
+        "otts.test.work",
+        "org.activiti.rest.editor"
+})
 @EnableAutoConfiguration
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {

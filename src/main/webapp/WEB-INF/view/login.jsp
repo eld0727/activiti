@@ -15,12 +15,12 @@
 <body>
     <div class="container">
         <form class="form-signin" action="<%=request.getContextPath()%>/login" method="POST">
-            <h2 class="form-signin-heading">Please sign in</h2>
-            <label for="name" class="sr-only">Email address</label>
-            <input type="text" name="username" id="name" class="form-control" placeholder="login" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <h2 class="form-signin-heading">Пожалуйста войдите</h2>
+            <label for="name" class="sr-only">Логин</label>
+            <input type="text" name="username" id="name" class="form-control" placeholder="Логин" required autofocus>
+            <label for="inputPassword" class="sr-only">Пароль</label>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Пароль" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
         </form>
     </div>
 </body>

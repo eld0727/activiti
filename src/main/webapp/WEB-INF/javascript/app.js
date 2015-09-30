@@ -22,7 +22,8 @@ define([
             "":                 "vote",
             "vote":             "vote",
             "vote/create":      "createVote",
-            "noty":             "notifications"
+            "noty":             "notifications",
+            "edit":             "editProcess"
         },
 
         /**
@@ -58,22 +59,24 @@ define([
             });
         },
 
-        notifications: function () {
-            this.state = "noty";
+        editProcess: function () {
+            this.state = "editProcess";
             var self = this;
-            require(["./vote/VoteList"], function (VoteList) {
-                if(self.state !== "noty") {
+            require(["./process/ProcessEditor"], function (ProcessEditor) {
+                if(self.state !== "editProcess") {
                     return;
                 }
-                var voteList = new VoteList();
+                var editor = new ProcessEditor();
                 $("#main-container")
                     .empty()
-                    .append(voteList.render().el);
+                    .append(editor.render().el);
             });
         }
     });
 
-    setInterval(function () {
+    var attempts = 5;
+    var timeout = 1000;
+    var notificationsCheck = function () {
         $.ajax({
             url: url("/api/notification/undelivered"),
             success: function (data) {
@@ -91,9 +94,18 @@ define([
                         });
                     });
                 }
+                attempts = 5;
+                setTimeout(notificationsCheck, timeout);
+            },
+            error: function () {
+                if(--attempts) {
+                    setTimeout(notificationsCheck, timeout);
+                }
             }
-        })
-    }, 1000);
+        });
+    };
+
+    notificationsCheck();
 
     new Router();
     Backbone.history.start({pushState: false, root: window._contextPath + "/"});

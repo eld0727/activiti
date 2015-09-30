@@ -1,15 +1,20 @@
 package otts.test.work.configuration;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
+import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -86,6 +91,26 @@ public class ActivitiConfiguration {
                     identityService.saveUser(user3);
                 }
 
+            }
+        };
+    }
+
+    @Bean
+    InitializingBean modelInitializer(final RepositoryService repositoryService) {
+
+        return new InitializingBean() {
+            public void afterPropertiesSet() throws Exception {
+                ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                        .processDefinitionKey("voteProcess")
+                        .singleResult();
+                BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
+                ObjectNode node = new BpmnJsonConverter().convertToJson(bpmnModel);
+                Model model = repositoryService.newModel();
+                model.setName("Vote process");
+                model.setKey(processDefinition.getKey());
+                model.setMetaInfo("{\"name\": \"Vote process\", \"description\":\"\"}");
+                repositoryService.saveModel(model);
+                repositoryService.addModelEditorSource(model.getId(), node.toString().getBytes());
             }
         };
     }
