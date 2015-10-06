@@ -1,6 +1,6 @@
 package otts.test.work.model.notification;
 
-import activiti.model.reflection.CustomTask;
+import activiti.model.reflection.CustomServiceTask;
 import activiti.model.reflection.TaskParameter;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,19 +17,25 @@ import java.util.regex.Pattern;
  */
 @Getter
 @Setter
-@CustomTask(bundle = SendNotificationTaskModelBundle.class)
+@CustomServiceTask(type = "sendNotification", bundle = SendNotificationTaskModelBundle.class)
 public class SendNotificationTask extends ServiceTask {
 
     /**
      * Получатель уведомления
      */
-    @TaskParameter(stencilParameter = SendNotificationTaskModelBundle.NOTIFICATION_RECEIVER_PROPERTY_ID)
+    @TaskParameter(
+            stencilParameter = SendNotificationTaskModelBundle.NOTIFICATION_RECEIVER_PROPERTY_ID,
+            xmlParameter = SendNotificationTaskModelBundle.NOTIFICATION_RECEIVER_PROPERTY_ID
+    )
     private String receiver;
 
     /**
      * Текст уведомления
      */
-    @TaskParameter(stencilParameter = SendNotificationTaskModelBundle.NOTIFICATION_TEXT_PROPERTY_ID)
+    @TaskParameter(
+            stencilParameter = SendNotificationTaskModelBundle.NOTIFICATION_TEXT_PROPERTY_ID,
+            xmlParameter = SendNotificationTaskModelBundle.NOTIFICATION_TEXT_PROPERTY_ID
+    )
     private String text;
 
     @Override

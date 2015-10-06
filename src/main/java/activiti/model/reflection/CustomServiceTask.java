@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Component
 @Scope("prototype")
-public @interface CustomTask {
+public @interface CustomServiceTask {
 
     String type() default "";
 

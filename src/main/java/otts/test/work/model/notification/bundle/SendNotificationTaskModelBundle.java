@@ -16,7 +16,6 @@ import org.activiti.engine.parse.BpmnParseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import otts.test.work.model.notification.SendNotificationTask;
-import otts.test.work.model.notification.bundle.xml.SendNotificationTaskXMLConverter;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -116,7 +115,7 @@ public class SendNotificationTaskModelBundle implements ModelBundle {
 
     @Override
     public BaseBpmnXMLConverter getXMLConverter() {
-        return new SendNotificationTaskXMLConverter();
+        return null;
     }
 
     @Override

@@ -19,12 +19,12 @@ public class JsonReflectionUtils {
     }
 
     private static ValueExtractor getExtractorForType(Class<?> type) {
-        if(isIntegral(type)) {
+        if(type.equals(String.class)) {
+            return new StringExtractor();
+        } else if(isIntegral(type)) {
             return new LongExtractor();
         } else if(isReal(type)) {
             return new DoubleExtractor();
-        } else if(type.equals(String.class)) {
-            return new StringExtractor();
         }
         throw new IllegalArgumentException("Unsupported type: " + type);
     }
