@@ -1,11 +1,10 @@
 package otts.test.work.service.impl;
 
+import activiti.model.converters.BpmnConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.log4j.Log4j;
-import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
@@ -24,18 +23,21 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Autowired
     private RepositoryService repositoryService;
 
+    @Autowired
+    private BpmnConverter bpmnConverter;
+
     @Override
     public Deployment deployModel(String modelId) {
         try {
             byte[] source = repositoryService.getModelEditorSource(modelId);
-            final ObjectNode modelNode = (ObjectNode) new ObjectMapper().readTree(source);
-            BpmnModel bpmnModel = new BpmnJsonConverter().convertToBpmnModel(modelNode);
-            byte[] bpmnBytes = new BpmnXMLConverter().convertToXML(bpmnModel);
+            final ObjectNode modelNode = (ObjectNode) new ObjectMapper().readTree(new String(source, "UTF-8"));
+            BpmnModel bpmnModel = bpmnConverter.convertToBpmnModel(modelNode);
+            byte[] bpmnBytes = bpmnConverter.convertToXML(bpmnModel);
             Model model = repositoryService.getModel(modelId);
             String processName = model.getKey() + ".bpmn20.xml";
             return repositoryService.createDeployment()
                     .name(model.getName() + " deployment")
-                    .addString(processName, new String(bpmnBytes))
+                    .addString(processName, new String(bpmnBytes, "UTF-8"))
                     .deploy();
         } catch (Exception e) {
             log.error("Something wrong: " + e.getMessage(), e);

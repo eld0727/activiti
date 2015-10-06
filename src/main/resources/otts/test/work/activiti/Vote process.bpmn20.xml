@@ -10,7 +10,11 @@
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${participants}" activiti:elementVariable="participant"></multiInstanceLoopCharacteristics>
       <startEvent id="startevent2" name="Start"></startEvent>
       <sequenceFlow id="flow3" sourceRef="startevent2" targetRef="sendNotification"></sequenceFlow>
-      <serviceTask id="sendNotification" name="Send notification" activiti:delegateExpression="${sendVoteNotificationDelegate}"></serviceTask>
+      <serviceTask id="sendNotification"
+                   name="Send notification"
+                   activiti:type="sendNotification"
+                   activiti:notification-text="Вас пригласили в голосование '${voteDTO.text}'"
+                   activiti:notification-receiver="${participant}"></serviceTask>
       <userTask id="chooceAnOption" name="Chooce an option" activiti:assignee="${participant}"></userTask>
       <sequenceFlow id="flow4" sourceRef="sendNotification" targetRef="chooceAnOption"></sequenceFlow>
       <sequenceFlow id="flow5" sourceRef="chooceAnOption" targetRef="saveChoice"></sequenceFlow>
@@ -18,7 +22,13 @@
       <endEvent id="endevent1" name="End"></endEvent>
       <sequenceFlow id="flow6" sourceRef="saveChoice" targetRef="endevent1"></sequenceFlow>
     </subProcess>
-    <serviceTask id="notifyParticipantsAboutResoults" name="Notify participants about results" activiti:delegateExpression="${sendVoteResultsNotificationDelegate}"></serviceTask>
+    <serviceTask id="notifyParticipantsAboutResoults"
+                 name="Notify participants about results"
+                 activiti:type="sendNotification"
+                 activiti:notification-text="Вы можете увидеть результаты голосования '${voteDTO.text}'"
+                 activiti:notification-receiver="${participant}">
+        <multiInstanceLoopCharacteristics isSequential="true" activiti:collection="${participants}" activiti:elementVariable="participant"></multiInstanceLoopCharacteristics>
+    </serviceTask>
     <endEvent id="endevent2" name="End"></endEvent>
     <sequenceFlow id="flow8" sourceRef="notifyParticipantsAboutResoults" targetRef="endevent2"></sequenceFlow>
     <sequenceFlow id="flow10" sourceRef="sendNotificationsAndWaitForVotes" targetRef="finishVote"></sequenceFlow>

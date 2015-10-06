@@ -20,4 +20,8 @@ public interface NotificationService {
      */
     List<Notification> getAllNotifications();
 
+    /**
+     * Посылает уведомление пользоветелю
+     */
+    Notification sendNotification(String userId, String text);
 }

@@ -43,4 +43,13 @@ public class NotificationServiceImpl implements NotificationService {
         User currentUser = userService.getCurrentUser();
         return notificationDAO.findAllByUser(currentUser.getId());
     }
+
+    @Override
+    public Notification sendNotification(String userId, String text) {
+        Notification notification = new Notification();
+        notification.setUser(userId);
+        notification.setData(text);
+        notificationDAO.save(notification);
+        return notification;
+    }
 }

@@ -1322,7 +1322,6 @@ KISBPM.CreateCommand = ORYX.Core.Command.extend({
 				this.shape.dockers.first().setDockedShape(this.connectedShape);
 				this.shape.dockers.first().setReferencePoint(this.sourceRefPos);
 			}
-			resume = true;
 		}
 		else {
 			this.shape = this.facade.createShape(this.option);

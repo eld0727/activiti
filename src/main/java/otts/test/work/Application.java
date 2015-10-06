@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @ComponentScan(value = {
         "otts.test.work",
-        "org.activiti.rest.editor"
+        "org.activiti.rest.editor",
+        "activiti.model"
 })
 @EnableAutoConfiguration
 @SpringBootApplication
