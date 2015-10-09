@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by alex on 02.10.2015.<br/>
- * Задание которое отправляет увкдомление пользователю
+ * Задание которое отправляет уведомление пользователю
  */
 @Getter
 @Setter
@@ -54,22 +54,5 @@ public class SendNotificationTask extends ServiceTask {
     @Override
     public String getImplementationType() {
         return ImplementationType.IMPLEMENTATION_TYPE_EXPRESSION;
-    }
-
-    @Override
-    public String getImplementation() {
-        return "${notificationService.sendNotification(" +
-                dispatchVariable(this.getReceiver()) + ", " +
-                dispatchVariable(this.getText())
-                + ")}";
-    }
-
-    protected String dispatchVariable(String s) {
-        Pattern pattern = Pattern.compile("\\$\\{(.+)\\}");
-        Matcher matcher = pattern.matcher(s);
-        if(matcher.matches()) {
-            return matcher.group(1);
-        }
-        return "\"" + s.replaceAll("\"", "\\\"").replace("${", "\".concat(").replace("}", ").concat(\"") + "\"" + (s.contains("}") ? ")" : "");
     }
 }

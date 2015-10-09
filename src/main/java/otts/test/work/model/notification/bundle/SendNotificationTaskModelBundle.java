@@ -9,13 +9,19 @@ import activiti.model.stencil.rules.StencilRule;
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.BaseBpmnXMLConverter;
 import org.activiti.bpmn.model.BaseElement;
+import org.activiti.engine.delegate.Expression;
+import org.activiti.engine.impl.bpmn.behavior.TaskActivityBehavior;
 import org.activiti.engine.impl.bpmn.parser.BpmnParse;
 import org.activiti.engine.impl.bpmn.parser.handler.AbstractActivityBpmnParseHandler;
+import org.activiti.engine.impl.el.ExpressionManager;
+import org.activiti.engine.impl.pvm.delegate.ActivityExecution;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.parse.BpmnParseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import otts.test.work.model.notification.SendNotificationTask;
+import otts.test.work.service.NotificationService;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -33,7 +39,12 @@ public class SendNotificationTaskModelBundle implements ModelBundle {
     public final static String NOTIFICATION_TEXT_PROPERTY_ID = "notification-text";
 
     @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
     private DefaultProperties defaultProperties;
+
+    private NotificationService notificationService;
 
     private Stencil sendNotificationStencil;
 
@@ -103,7 +114,21 @@ public class SendNotificationTaskModelBundle implements ModelBundle {
             @Override
             protected void executeParse(BpmnParse bpmnParse, SendNotificationTask element) {
                 ActivityImpl activity = createActivityOnCurrentScope(bpmnParse, element, BpmnXMLConstants.ELEMENT_TASK_SERVICE);
-                activity.setActivityBehavior(bpmnParse.getActivityBehaviorFactory().createServiceTaskExpressionActivityBehavior(element));
+                ExpressionManager expressionManager = bpmnParse.getExpressionManager();
+                final Expression receiver = expressionManager.createExpression(element.getReceiver());
+                final Expression text = expressionManager.createExpression(element.getText());
+                activity.setActivityBehavior(new TaskActivityBehavior() {
+                    @Override
+                    public void execute(ActivityExecution execution) throws Exception {
+                        if (notificationService == null) {
+                            notificationService = applicationContext.getBean(NotificationService.class);
+                        }
+                        String userId = String.valueOf(receiver.getValue(execution));
+                        String notification = String.valueOf(text.getValue(execution));
+                        notificationService.sendNotification(userId, notification);
+                        leave(execution);
+                    }
+                });
             }
         };
     }
